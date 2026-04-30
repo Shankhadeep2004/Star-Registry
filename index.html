@@ -4,54 +4,417 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Star Registry</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --green:#1a6b3a;--green-mid:#2d9653;--green-light:#e8f5ee;
-  --surface:#ffffff;--bg:#f0f4f1;--border:rgba(0,0,0,0.08);
-  --border-md:rgba(0,0,0,0.14);--text:#111827;--muted:#6b7280;
-  --danger:#dc2626;--danger-bg:#fef2f2;--radius:12px;--radius-lg:18px;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green:       #1a6b3a;
+  --green-mid:   #2d9653;
+  --green-light: #e8f5ee;
+  --green-pale:  #f2faf5;
+  --surface:     #ffffff;
+  --bg:          #f0f4f1;
+  --border:      rgba(0,0,0,0.08);
+  --border-md:   rgba(0,0,0,0.14);
+  --text:        #111827;
+  --muted:       #6b7280;
+  --danger:      #dc2626;
+  --danger-bg:   #fef2f2;
+  --radius:      12px;
+  --radius-lg:   18px;
 }
-html,body{min-height:100vh;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);}
-.shell{max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:30px;}
-.header{background:var(--green);padding:32px 22px 40px;position:relative;overflow:hidden;}
-.header::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.06);}
-.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.14);border-radius:20px;padding:5px 14px;font-size:11px;color:rgba(255,255,255,0.85);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:14px;font-weight:500;}
-.header-title{font-family:'DM Serif Display',serif;font-size:30px;color:white;line-height:1.1;margin-bottom:6px;}
-.header-sub{font-size:13px;color:rgba(255,255,255,0.55);}
-.card{background:var(--surface);margin:-16px 14px 14px;border-radius:var(--radius-lg);border:0.5px solid var(--border);padding:22px 20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
-.section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin-bottom:12px;}
-.divider{border:none;border-top:0.5px solid var(--border);margin:18px 0;}
-.field{margin-bottom:14px;}
-.field-label{font-size:12px;color:var(--muted);margin-bottom:6px;display:block;font-weight:500;}
-.field-input{width:100%;height:48px;border-radius:var(--radius);border:1px solid var(--border-md);background:var(--bg);padding:0 14px;font-size:15px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:all 0.15s;}
-.field-input:focus{border-color:var(--green-mid);box-shadow:0 0 0 3px rgba(45,150,83,0.1);background:#fff;}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.amt-wrap{position:relative;}
-.amt-prefix{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);font-weight:500;}
-.amt-wrap .field-input{padding-left:26px;}
-.upload-area{border:1.5px dashed var(--border-md);border-radius:var(--radius);padding:24px 16px;text-align:center;cursor:pointer;background:var(--bg);position:relative;transition:all 0.15s;}
-.upload-area:hover{border-color:var(--green-mid);background:var(--green-light);}
-.upload-area.has-photo{border-style:solid;border-color:var(--green-mid);background:var(--green-light);}
-.upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;}
-.upload-icon{width:42px;height:42px;border-radius:50%;background:var(--green-light);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;color:var(--green);}
-.upload-text{font-size:13px;color:var(--muted);line-height:1.6;}
-.upload-text strong{color:var(--green);font-weight:600;}
-.preview-img{width:100%;max-height:170px;object-fit:cover;border-radius:10px;display:none;}
-.file-name{font-size:12px;color:var(--green);margin-top:8px;font-weight:500;display:none;}
-.student-box{border:1px solid var(--border);background:var(--bg);border-radius:14px;padding:14px;margin-bottom:14px;}
-.student-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.student-title{font-size:13px;font-weight:600;color:var(--green);}
-.remove-btn{border:none;background:#fee2e2;color:#dc2626;padding:6px 10px;border-radius:8px;font-size:12px;cursor:pointer;font-weight:600;}
-.add-btn{width:100%;height:48px;border-radius:var(--radius);border:1px dashed var(--green-mid);background:var(--green-light);color:var(--green);font-size:14px;font-weight:600;cursor:pointer;margin-top:10px;}
-.submit-btn{width:100%;height:54px;border-radius:var(--radius);border:none;background:var(--green);color:white;font-size:16px;font-weight:600;cursor:pointer;margin-top:18px;transition:background 0.15s;}
-.submit-btn:hover:not(:disabled){background:#145c31;}
-.submit-btn:disabled{background:#6b9e7e;cursor:not-allowed;}
-.toast{margin:0 14px 16px;border-radius:var(--radius);padding:14px 16px;font-size:14px;font-weight:500;display:none;}
-.toast.ok{background:var(--green-light);color:var(--green);}
-.toast.err{background:var(--danger-bg);color:var(--danger);}
-.hidden{display:none;}
+
+html, body {
+  min-height: 100vh;
+  background: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+}
+
+.shell {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--green);
+  padding: 36px 22px 52px;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; left: -30px;
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+.header-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 34px;
+  color: white;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+.header-sub {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  font-weight: 400;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--surface);
+  margin: -20px 14px 14px;
+  border-radius: var(--radius-lg);
+  border: 0.5px solid var(--border);
+  padding: 24px 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  position: relative;
+  z-index: 1;
+}
+
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  color: var(--green);
+  margin-bottom: 14px;
+}
+
+.divider {
+  border: none;
+  border-top: 0.5px solid var(--border);
+  margin: 20px 0;
+}
+
+/* ── FIELDS ── */
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+
+.field-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  display: block;
+  font-weight: 500;
+}
+
+.field-input {
+  width: 100%;
+  height: 48px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-md);
+  background: var(--bg);
+  padding: 0 14px;
+  font-size: 15px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: all 0.15s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.field-input:focus {
+  border-color: var(--green-mid);
+  box-shadow: 0 0 0 3px rgba(45,150,83,0.12);
+  background: #fff;
+}
+.field-input::placeholder { color: #b0b8c1; }
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.amt-wrap { position: relative; }
+.amt-prefix {
+  position: absolute;
+  left: 14px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 15px;
+  color: var(--muted);
+  font-weight: 600;
+  pointer-events: none;
+}
+.amt-wrap .field-input { padding-left: 28px; }
+
+/* ── UPLOAD ── */
+.upload-area {
+  border: 1.5px dashed var(--border-md);
+  border-radius: var(--radius);
+  padding: 26px 16px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--bg);
+  position: relative;
+  transition: all 0.2s;
+  overflow: hidden;
+}
+.upload-area:hover { border-color: var(--green-mid); background: var(--green-light); }
+.upload-area.has-photo { border-style: solid; border-color: var(--green-mid); background: var(--green-pale); padding: 12px; }
+
+.upload-area input {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer;
+  width: 100%; height: 100%;
+}
+
+.upload-icon-wrap {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: var(--green-light);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px;
+  font-size: 20px;
+  transition: all 0.2s;
+}
+.upload-area:hover .upload-icon-wrap { background: white; }
+
+.upload-text { font-size: 13px; color: var(--muted); line-height: 1.7; }
+.upload-text strong { color: var(--green); font-weight: 600; display: block; }
+
+.preview-img {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: none;
+}
+.file-name {
+  font-size: 12px;
+  color: var(--green);
+  margin-top: 8px;
+  font-weight: 600;
+  display: none;
+}
+
+/* ── STUDENT BOXES ── */
+.student-box {
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+  animation: slideIn 0.25s ease;
+}
+.student-box:focus-within { border-color: rgba(45,150,83,0.4); }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.student-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.student-title { font-size: 13px; font-weight: 600; color: var(--green); }
+.remove-btn {
+  border: none;
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+.remove-btn:hover { background: #fecaca; }
+
+.add-btn {
+  width: 100%;
+  height: 48px;
+  border-radius: var(--radius);
+  border: 1.5px dashed var(--green-mid);
+  background: var(--green-pale);
+  color: var(--green);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.add-btn:hover { background: var(--green-light); border-style: solid; }
+
+/* ── PROGRESS ── */
+.progress-section {
+  display: none;
+  margin-top: 20px;
+}
+.progress-section.visible { display: block; animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.prog-bar-track {
+  height: 6px;
+  background: #dde9e3;
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.prog-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green-mid), var(--green));
+  border-radius: 99px;
+  width: 0%;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.prog-steps { display: flex; flex-direction: column; gap: 8px; }
+
+.prog-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 0.5px solid var(--border);
+  background: var(--bg);
+  transition: all 0.3s ease;
+  opacity: 0.45;
+}
+.prog-step.active {
+  border-color: rgba(45,150,83,0.4);
+  background: var(--green-light);
+  opacity: 1;
+}
+.prog-step.done {
+  border-color: rgba(26,107,58,0.3);
+  background: var(--green-pale);
+  opacity: 1;
+}
+.prog-step.error {
+  border-color: rgba(220,38,38,0.3);
+  background: var(--danger-bg);
+  opacity: 1;
+}
+
+.prog-step-icon {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  background: white;
+  color: var(--muted);
+  border: 1.5px solid var(--border-md);
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+.prog-step.active .prog-step-icon {
+  background: var(--green-mid);
+  color: white;
+  border-color: var(--green-mid);
+  animation: pulse 1.2s ease infinite;
+}
+.prog-step.done .prog-step-icon {
+  background: var(--green);
+  color: white;
+  border-color: var(--green);
+}
+.prog-step.error .prog-step-icon {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border-color: rgba(220,38,38,0.4);
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(45,150,83,0.35); }
+  50%       { box-shadow: 0 0 0 6px rgba(45,150,83,0); }
+}
+
+.prog-step-label {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+.prog-step.active .prog-step-label { color: var(--green); }
+.prog-step.done .prog-step-label   { color: #1a6b3a; }
+.prog-step.error .prog-step-label  { color: var(--danger); }
+
+/* ── SUBMIT ── */
+.submit-btn {
+  width: 100%;
+  height: 54px;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--green);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 18px;
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.2px;
+}
+.submit-btn:hover:not(:disabled) { background: #145c31; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(26,107,58,0.3); }
+.submit-btn:active:not(:disabled) { transform: translateY(0); }
+.submit-btn:disabled { background: #6b9e7e; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ── RESULT BOX ── */
+.result-box {
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 500;
+  display: none;
+  margin-top: 14px;
+  animation: fadeIn 0.3s ease;
+  line-height: 1.5;
+}
+.result-box.ok  { background: var(--green-light); color: var(--green); border: 0.5px solid rgba(45,150,83,0.4); }
+.result-box.err { background: var(--danger-bg); color: var(--danger); border: 0.5px solid rgba(220,38,38,0.3); }
+
+/* ── TOAST ── */
+.toast {
+  margin: 0 14px 16px;
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  display: none;
+  animation: fadeIn 0.25s ease;
+}
+.toast.ok  { background: var(--green-light); color: var(--green); }
+.toast.err { background: var(--danger-bg); color: var(--danger); }
+
+.hidden { display: none; }
 </style>
 </head>
 <body>
@@ -84,9 +447,14 @@ html,body{min-height:100vh;background:var(--bg);font-family:'DM Sans',sans-serif
     <div class="section-label">Upload Photo</div>
     <div class="upload-area" id="upload-area">
       <input type="file" accept="image/*" id="f-photo" onchange="handlePhoto(this)">
-      <div class="upload-icon" id="upload-icon">⬆</div>
-      <div class="upload-text" id="upload-text"><strong>Tap to upload photo</strong><br>Upload first to continue</div>
-      <img class="preview-img" id="preview-img">
+      <div id="upload-placeholder">
+        <div class="upload-icon-wrap">📷</div>
+        <div class="upload-text">
+          <strong>Tap to upload photo</strong>
+          JPG or PNG — fill class &amp; subject first
+        </div>
+      </div>
+      <img class="preview-img" id="preview-img" alt="Preview">
       <div class="file-name" id="file-name"></div>
     </div>
 
@@ -96,7 +464,7 @@ html,body{min-height:100vh;background:var(--bg);font-family:'DM Sans',sans-serif
       <div class="section-label">Teacher Information</div>
       <div class="field">
         <label class="field-label">Teacher Name</label>
-        <input class="field-input" id="f-teacher" type="text" placeholder="Teacher name" oninput="showStudentsSection()">
+        <input class="field-input" id="f-teacher" type="text" placeholder="Enter teacher name" oninput="maybeShowStudents()">
       </div>
     </div>
 
@@ -106,6 +474,31 @@ html,body{min-height:100vh;background:var(--bg);font-family:'DM Sans',sans-serif
       <div class="section-label">Students</div>
       <div id="students-wrap"></div>
       <button class="add-btn" onclick="addStudent()">+ Add Another Student</button>
+
+      <!-- PROGRESS -->
+      <div class="progress-section" id="progress-section">
+        <div class="prog-bar-track"><div class="prog-bar-fill" id="prog-bar"></div></div>
+        <div class="prog-steps">
+          <div class="prog-step" id="step-1">
+            <div class="prog-step-icon" id="step-icon-1">1</div>
+            <div class="prog-step-label">Preparing student data</div>
+          </div>
+          <div class="prog-step" id="step-2">
+            <div class="prog-step-icon" id="step-icon-2">2</div>
+            <div class="prog-step-label">Uploading photo to Drive</div>
+          </div>
+          <div class="prog-step" id="step-3">
+            <div class="prog-step-icon" id="step-icon-3">3</div>
+            <div class="prog-step-label">Saving to spreadsheet</div>
+          </div>
+          <div class="prog-step" id="step-4">
+            <div class="prog-step-icon" id="step-icon-4">4</div>
+            <div class="prog-step-label">Confirming submission</div>
+          </div>
+        </div>
+        <div class="result-box" id="result-box"></div>
+      </div>
+
       <button class="submit-btn" id="submit-btn" onclick="submitForm()">Submit All Stars</button>
     </div>
 
@@ -116,40 +509,65 @@ html,body{min-height:100vh;background:var(--bg);font-family:'DM Sans',sans-serif
 </div>
 
 <script>
-
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznyfUbjPXADVeZgfnfDUaeJAwCPoNwQFMVJaEtDh0YLrYa6SosaW8LbYqzoR2jCRks/exec";
 
 let photoBase64 = '';
-let photoName = '';
+let photoName   = '';
+let studentCount = 0;
+let studentSectionShown = false;
+let isSubmitting = false;
 
-/* ---------- PHOTO ---------- */
+/* ── HELPERS ── */
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const pad   = n  => String(n).padStart(2, '0');
+
+function getToday() {
+  const d = new Date();
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+function getExpiry() {
+  const d = new Date();
+  d.setMonth(d.getMonth() + 6);
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+function getTimestamp() {
+  const d = new Date();
+  return `${getToday()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
+/* ── TOAST ── */
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type;
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 4500);
+}
+
+/* ── PHOTO ── */
 function handlePhoto(input) {
-  const cls = document.getElementById('fixed-class').value.trim();
+  const cls     = document.getElementById('fixed-class').value.trim();
   const subject = document.getElementById('f-subject').value.trim();
-
   if (!cls || !subject) {
     showToast('Please fill class and subject first', 'err');
     input.value = '';
     return;
   }
-
   const file = input.files[0];
   if (!file) return;
 
   const reader = new FileReader();
   reader.onload = function(e) {
     photoBase64 = e.target.result.split(',')[1];
-    photoName = file.name;
+    photoName   = file.name;
 
     const img = document.getElementById('preview-img');
     img.src = e.target.result;
     img.style.display = 'block';
-
-    document.getElementById('upload-icon').style.display = 'none';
-    document.getElementById('upload-text').style.display = 'none';
+    document.getElementById('upload-placeholder').style.display = 'none';
 
     const fn = document.getElementById('file-name');
-    fn.textContent = file.name;
+    fn.textContent = '✓ ' + file.name;
     fn.style.display = 'block';
 
     document.getElementById('upload-area').classList.add('has-photo');
@@ -158,10 +576,8 @@ function handlePhoto(input) {
   reader.readAsDataURL(file);
 }
 
-/* ---------- STUDENTS SECTION ---------- */
-let studentSectionShown = false;
-
-function showStudentsSection() {
+/* ── STUDENTS ── */
+function maybeShowStudents() {
   const teacher = document.getElementById('f-teacher').value.trim();
   if (teacher && !studentSectionShown) {
     studentSectionShown = true;
@@ -170,18 +586,6 @@ function showStudentsSection() {
   }
 }
 
-/* ---------- TOAST ---------- */
-function showToast(msg, type) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast ' + type;
-  t.style.display = 'block';
-  setTimeout(() => { t.style.display = 'none'; }, 4000);
-}
-
-/* ---------- ADD STUDENT ---------- */
-let studentCount = 0;
-
 function addStudent() {
   studentCount++;
   const div = document.createElement('div');
@@ -189,7 +593,7 @@ function addStudent() {
   div.innerHTML = `
     <div class="student-head">
       <div class="student-title">Student ${studentCount}</div>
-      ${studentCount > 1 ? `<button class="remove-btn" onclick="this.parentElement.parentElement.remove()">Remove</button>` : ''}
+      ${studentCount > 1 ? `<button class="remove-btn" onclick="this.closest('.student-box').remove()">Remove</button>` : ''}
     </div>
     <div class="field">
       <label class="field-label">Student Name</label>
@@ -201,45 +605,63 @@ function addStudent() {
         <span class="amt-prefix">#</span>
         <input class="field-input student-amount" type="number" placeholder="0" min="1">
       </div>
-    </div>
-  `;
+    </div>`;
   document.getElementById('students-wrap').appendChild(div);
 }
 
-/* ---------- DATE HELPERS ---------- */
-function pad(n) { return String(n).padStart(2, '0'); }
+/* ── PROGRESS ── */
+const BAR_PCT = { 1: 18, 2: 48, 3: 78, 4: 100 };
 
-function getToday() {
-  const d = new Date();
-  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+function setBar(pct) {
+  document.getElementById('prog-bar').style.width = pct + '%';
 }
 
-function getExpiry() {
-  const d = new Date();
-  d.setMonth(d.getMonth() + 6);
-  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+function setStep(n, state) {
+  const step = document.getElementById('step-' + n);
+  const icon = document.getElementById('step-icon-' + n);
+  if (!step || !icon) return;
+  step.className = 'prog-step ' + state;
+  icon.textContent = state === 'done' ? '✓' : state === 'error' ? '✕' : n;
+  if (BAR_PCT[n]) setBar(BAR_PCT[n]);
 }
 
-function getTimestamp() {
-  const d = new Date();
-  return `${getToday()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+function resetSteps() {
+  for (let i = 1; i <= 4; i++) {
+    const s = document.getElementById('step-' + i);
+    const ic = document.getElementById('step-icon-' + i);
+    if (s)  s.className = 'prog-step';
+    if (ic) ic.textContent = i;
+  }
+  setBar(0);
+  const rb = document.getElementById('result-box');
+  rb.style.display = 'none';
+  rb.className = 'result-box';
+  rb.textContent = '';
 }
 
-/* ---------- SUBMIT ---------- */
+function showResult(msg, type) {
+  const rb = document.getElementById('result-box');
+  rb.textContent = msg;
+  rb.className = 'result-box ' + type;
+  rb.style.display = 'block';
+}
+
+function showProgressSection(visible) {
+  const ps = document.getElementById('progress-section');
+  if (visible) { ps.classList.add('visible'); ps.style.display = 'block'; }
+  else         { ps.classList.remove('visible'); ps.style.display = 'none'; }
+}
+
+/* ── SUBMIT ── */
 async function submitForm() {
+  if (isSubmitting) return;
+
   const cls     = document.getElementById('fixed-class').value.trim();
   const subject = document.getElementById('f-subject').value.trim();
   const teacher = document.getElementById('f-teacher').value.trim();
 
-  if (!cls || !subject || !teacher) {
-    showToast('Please fill class, subject and teacher', 'err');
-    return;
-  }
-
-  if (!photoBase64) {
-    showToast('Please upload a photo first', 'err');
-    return;
-  }
+  if (!cls || !subject || !teacher) { showToast('Please fill class, subject and teacher', 'err'); return; }
+  if (!photoBase64)                 { showToast('Please upload a photo first', 'err'); return; }
 
   const names   = document.querySelectorAll('.student-name');
   const amounts = document.querySelectorAll('.student-amount');
@@ -248,12 +670,7 @@ async function submitForm() {
   for (let i = 0; i < names.length; i++) {
     const name   = names[i].value.trim();
     const amount = amounts[i].value.trim();
-
-    if (!name || !amount) {
-      showToast('Please fill all student details', 'err');
-      return;
-    }
-
+    if (!name || !amount) { showToast('Please fill all student details', 'err'); return; }
     students.push({
       timestamp:    getTimestamp(),
       date:         getToday(),
@@ -271,53 +688,91 @@ async function submitForm() {
     });
   }
 
+  isSubmitting = true;
   const btn = document.getElementById('submit-btn');
-  btn.textContent = 'Submitting…';
   btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  showProgressSection(true);
+  resetSteps();
+
+  let hadError = false;
 
   try {
-    await fetch(SCRIPT_URL, {
+    /* Step 1 — prepare data */
+    setStep(1, 'active');
+    await sleep(380);
+    setStep(1, 'done');
+
+    /* Step 2 — fire fetch + animate upload */
+    setStep(2, 'active');
+    const fetchPromise = fetch(SCRIPT_URL, {
       method:  'POST',
-      mode:    'no-cors',          // Google Apps Script requires no-cors
+      mode:    'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ students })
     });
+    await sleep(1300);
+    setStep(2, 'done');
 
-    // With no-cors we always get an opaque response — reaching here means the
-    // request was sent successfully.
-    showToast('All stars submitted successfully! ✅', 'ok');
+    /* Step 3 — saving */
+    setStep(3, 'active');
+    await sleep(950);
+    setStep(3, 'done');
 
-    // Reset form
+    /* Step 4 — confirm (wait for fetch) */
+    setStep(4, 'active');
+    await fetchPromise;
+    await sleep(400);
+    setStep(4, 'done');
+
+    showResult('✅ All stars submitted successfully! Check your Google Sheet.', 'ok');
+    btn.textContent = 'Submitted!';
+
+    await sleep(3000);
     resetForm();
 
-  } catch (e) {
-    showToast('Network error: ' + e.message, 'err');
-  } finally {
-    btn.textContent = 'Submit All Stars';
+  } catch (err) {
+    hadError = true;
+    for (let i = 1; i <= 4; i++) {
+      const s = document.getElementById('step-' + i);
+      if (s && s.classList.contains('active')) { setStep(i, 'error'); break; }
+    }
+    showResult('❌ Network error: ' + err.message + '. Please try again.', 'err');
+    btn.textContent = 'Retry';
     btn.disabled = false;
+    isSubmitting = false;
   }
+
+  if (!hadError) isSubmitting = false;
 }
 
-/* ---------- RESET ---------- */
+/* ── RESET ── */
 function resetForm() {
-  document.getElementById('fixed-class').value = '';
-  document.getElementById('f-subject').value = '';
-  document.getElementById('f-teacher').value = '';
-  document.getElementById('f-photo').value = '';
-  document.getElementById('preview-img').style.display = 'none';
-  document.getElementById('upload-icon').style.display = 'flex';
-  document.getElementById('upload-text').style.display = 'block';
+  ['fixed-class','f-subject','f-teacher','f-photo'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+
+  const img = document.getElementById('preview-img');
+  img.src = ''; img.style.display = 'none';
+
+  document.getElementById('upload-placeholder').style.display = 'block';
   document.getElementById('file-name').style.display = 'none';
   document.getElementById('upload-area').classList.remove('has-photo');
   document.getElementById('teacher-section').classList.add('hidden');
   document.getElementById('students-section').classList.add('hidden');
   document.getElementById('students-wrap').innerHTML = '';
-  photoBase64 = '';
-  photoName = '';
-  studentCount = 0;
-  studentSectionShown = false;
-}
 
+  showProgressSection(false);
+  resetSteps();
+
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Submit All Stars';
+  btn.disabled = false;
+
+  photoBase64 = ''; photoName = '';
+  studentCount = 0; studentSectionShown = false; isSubmitting = false;
+}
 </script>
 </body>
 </html>
