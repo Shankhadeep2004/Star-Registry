@@ -3,485 +3,110 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
 <title>Star Registry</title>
-
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
-
 <style>
-
-*, *::before, *::after{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
+*, *::before, *::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --green:#1a6b3a;
-  --green-mid:#2d9653;
-  --green-light:#e8f5ee;
-  --surface:#ffffff;
-  --bg:#f0f4f1;
-  --border:rgba(0,0,0,0.08);
-  --border-md:rgba(0,0,0,0.14);
-  --text:#111827;
-  --muted:#6b7280;
-  --danger:#dc2626;
-  --danger-bg:#fef2f2;
-  --radius:12px;
-  --radius-lg:18px;
+  --green:#1a6b3a;--green-mid:#2d9653;--green-light:#e8f5ee;
+  --surface:#ffffff;--bg:#f0f4f1;--border:rgba(0,0,0,0.08);
+  --border-md:rgba(0,0,0,0.14);--text:#111827;--muted:#6b7280;
+  --danger:#dc2626;--danger-bg:#fef2f2;--radius:12px;--radius-lg:18px;
 }
-
-html,body{
-  min-height:100vh;
-  background:var(--bg);
-  font-family:'DM Sans',sans-serif;
-  color:var(--text);
-}
-
-.shell{
-  max-width:430px;
-  margin:0 auto;
-  min-height:100vh;
-  padding-bottom:30px;
-}
-
-/* HEADER */
-
-.header{
-  background:var(--green);
-  padding:32px 22px 40px;
-  position:relative;
-  overflow:hidden;
-}
-
-.header::before{
-  content:'';
-  position:absolute;
-  top:-50px;
-  right:-50px;
-  width:180px;
-  height:180px;
-  border-radius:50%;
-  background:rgba(255,255,255,0.06);
-}
-
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  background:rgba(255,255,255,0.14);
-  border-radius:20px;
-  padding:5px 14px;
-  font-size:11px;
-  color:rgba(255,255,255,0.85);
-  letter-spacing:0.8px;
-  text-transform:uppercase;
-  margin-bottom:14px;
-  font-weight:500;
-}
-
-.header-title{
-  font-family:'DM Serif Display',serif;
-  font-size:30px;
-  color:white;
-  line-height:1.1;
-  margin-bottom:6px;
-}
-
-.header-sub{
-  font-size:13px;
-  color:rgba(255,255,255,0.55);
-}
-
-/* CARD */
-
-.card{
-  background:var(--surface);
-  margin:-16px 14px 14px;
-  border-radius:var(--radius-lg);
-  border:0.5px solid var(--border);
-  padding:22px 20px;
-  box-shadow:0 2px 12px rgba(0,0,0,0.06);
-}
-
-.section-label{
-  font-size:10px;
-  font-weight:600;
-  text-transform:uppercase;
-  letter-spacing:1.2px;
-  color:var(--green);
-  margin-bottom:12px;
-}
-
-.divider{
-  border:none;
-  border-top:0.5px solid var(--border);
-  margin:18px 0;
-}
-
-/* FIELD */
-
-.field{
-  margin-bottom:14px;
-}
-
-.field-label{
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:6px;
-  display:block;
-  font-weight:500;
-}
-
-.field-input{
-  width:100%;
-  height:48px;
-  border-radius:var(--radius);
-  border:1px solid var(--border-md);
-  background:var(--bg);
-  padding:0 14px;
-  font-size:15px;
-  color:var(--text);
-  font-family:'DM Sans',sans-serif;
-  outline:none;
-  transition:all 0.15s;
-}
-
-.field-input:focus{
-  border-color:var(--green-mid);
-  box-shadow:0 0 0 3px rgba(45,150,83,0.1);
-  background:#fff;
-}
-
-.row2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.amt-wrap{
-  position:relative;
-}
-
-.amt-prefix{
-  position:absolute;
-  left:14px;
-  top:50%;
-  transform:translateY(-50%);
-  font-size:15px;
-  color:var(--muted);
-  font-weight:500;
-}
-
-.amt-wrap .field-input{
-  padding-left:26px;
-}
-
-/* UPLOAD */
-
-.upload-area{
-  border:1.5px dashed var(--border-md);
-  border-radius:var(--radius);
-  padding:24px 16px;
-  text-align:center;
-  cursor:pointer;
-  background:var(--bg);
-  position:relative;
-  transition:all 0.15s;
-}
-
-.upload-area:hover{
-  border-color:var(--green-mid);
-  background:var(--green-light);
-}
-
-.upload-area.has-photo{
-  border-style:solid;
-  border-color:var(--green-mid);
-  background:var(--green-light);
-}
-
-.upload-area input{
-  position:absolute;
-  inset:0;
-  opacity:0;
-  cursor:pointer;
-}
-
-.upload-icon{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  background:var(--green-light);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:0 auto 10px;
-  color:var(--green);
-}
-
-.upload-text{
-  font-size:13px;
-  color:var(--muted);
-  line-height:1.6;
-}
-
-.upload-text strong{
-  color:var(--green);
-  font-weight:600;
-}
-
-.preview-img{
-  width:100%;
-  max-height:170px;
-  object-fit:cover;
-  border-radius:10px;
-  display:none;
-}
-
-.file-name{
-  font-size:12px;
-  color:var(--green);
-  margin-top:8px;
-  font-weight:500;
-  display:none;
-}
-
-/* STUDENTS */
-
-.student-box{
-  border:1px solid var(--border);
-  background:var(--bg);
-  border-radius:14px;
-  padding:14px;
-  margin-bottom:14px;
-}
-
-.student-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:12px;
-}
-
-.student-title{
-  font-size:13px;
-  font-weight:600;
-  color:var(--green);
-}
-
-.remove-btn{
-  border:none;
-  background:#fee2e2;
-  color:#dc2626;
-  padding:6px 10px;
-  border-radius:8px;
-  font-size:12px;
-  cursor:pointer;
-  font-weight:600;
-}
-
-/* BUTTONS */
-
-.add-btn{
-  width:100%;
-  height:48px;
-  border-radius:var(--radius);
-  border:1px dashed var(--green-mid);
-  background:var(--green-light);
-  color:var(--green);
-  font-size:14px;
-  font-weight:600;
-  cursor:pointer;
-  margin-top:10px;
-}
-
-.submit-btn{
-  width:100%;
-  height:54px;
-  border-radius:var(--radius);
-  border:none;
-  background:var(--green);
-  color:white;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer;
-  margin-top:18px;
-}
-
-.submit-btn:hover{
-  background:#145c31;
-}
-
-/* TOAST */
-
-.toast{
-  margin:0 14px 16px;
-  border-radius:var(--radius);
-  padding:14px 16px;
-  font-size:14px;
-  font-weight:500;
-  display:none;
-}
-
-.toast.ok{
-  background:var(--green-light);
-  color:var(--green);
-}
-
-.toast.err{
-  background:var(--danger-bg);
-  color:var(--danger);
-}
-
-/* HIDDEN */
-
-.hidden{
-  display:none;
-}
-
+html,body{min-height:100vh;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);}
+.shell{max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:30px;}
+.header{background:var(--green);padding:32px 22px 40px;position:relative;overflow:hidden;}
+.header::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.06);}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.14);border-radius:20px;padding:5px 14px;font-size:11px;color:rgba(255,255,255,0.85);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:14px;font-weight:500;}
+.header-title{font-family:'DM Serif Display',serif;font-size:30px;color:white;line-height:1.1;margin-bottom:6px;}
+.header-sub{font-size:13px;color:rgba(255,255,255,0.55);}
+.card{background:var(--surface);margin:-16px 14px 14px;border-radius:var(--radius-lg);border:0.5px solid var(--border);padding:22px 20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+.section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin-bottom:12px;}
+.divider{border:none;border-top:0.5px solid var(--border);margin:18px 0;}
+.field{margin-bottom:14px;}
+.field-label{font-size:12px;color:var(--muted);margin-bottom:6px;display:block;font-weight:500;}
+.field-input{width:100%;height:48px;border-radius:var(--radius);border:1px solid var(--border-md);background:var(--bg);padding:0 14px;font-size:15px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:all 0.15s;}
+.field-input:focus{border-color:var(--green-mid);box-shadow:0 0 0 3px rgba(45,150,83,0.1);background:#fff;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.amt-wrap{position:relative;}
+.amt-prefix{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);font-weight:500;}
+.amt-wrap .field-input{padding-left:26px;}
+.upload-area{border:1.5px dashed var(--border-md);border-radius:var(--radius);padding:24px 16px;text-align:center;cursor:pointer;background:var(--bg);position:relative;transition:all 0.15s;}
+.upload-area:hover{border-color:var(--green-mid);background:var(--green-light);}
+.upload-area.has-photo{border-style:solid;border-color:var(--green-mid);background:var(--green-light);}
+.upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.upload-icon{width:42px;height:42px;border-radius:50%;background:var(--green-light);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;color:var(--green);}
+.upload-text{font-size:13px;color:var(--muted);line-height:1.6;}
+.upload-text strong{color:var(--green);font-weight:600;}
+.preview-img{width:100%;max-height:170px;object-fit:cover;border-radius:10px;display:none;}
+.file-name{font-size:12px;color:var(--green);margin-top:8px;font-weight:500;display:none;}
+.student-box{border:1px solid var(--border);background:var(--bg);border-radius:14px;padding:14px;margin-bottom:14px;}
+.student-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.student-title{font-size:13px;font-weight:600;color:var(--green);}
+.remove-btn{border:none;background:#fee2e2;color:#dc2626;padding:6px 10px;border-radius:8px;font-size:12px;cursor:pointer;font-weight:600;}
+.add-btn{width:100%;height:48px;border-radius:var(--radius);border:1px dashed var(--green-mid);background:var(--green-light);color:var(--green);font-size:14px;font-weight:600;cursor:pointer;margin-top:10px;}
+.submit-btn{width:100%;height:54px;border-radius:var(--radius);border:none;background:var(--green);color:white;font-size:16px;font-weight:600;cursor:pointer;margin-top:18px;transition:background 0.15s;}
+.submit-btn:hover:not(:disabled){background:#145c31;}
+.submit-btn:disabled{background:#6b9e7e;cursor:not-allowed;}
+.toast{margin:0 14px 16px;border-radius:var(--radius);padding:14px 16px;font-size:14px;font-weight:500;display:none;}
+.toast.ok{background:var(--green-light);color:var(--green);}
+.toast.err{background:var(--danger-bg);color:var(--danger);}
+.hidden{display:none;}
 </style>
 </head>
-
 <body>
-
 <div class="shell">
 
   <div class="header">
-
-    <div class="badge">
-      ⭐ Star Registry
-    </div>
-
-    <div class="header-title">
-      Award Stars
-    </div>
-
-    <div class="header-sub">
-      Add multiple students instantly
-    </div>
-
+    <div class="badge">⭐ Star Registry</div>
+    <div class="header-title">Award Stars</div>
+    <div class="header-sub">Add multiple students instantly</div>
   </div>
 
   <div class="card">
 
-    <!-- STEP 1 -->
-
-    <div class="section-label">
-      Basic Information
-    </div>
-
+    <!-- BASIC INFO -->
+    <div class="section-label">Basic Information</div>
     <div class="row2">
-
       <div class="field">
-        <label class="field-label">
-          Class
-        </label>
-
-        <input
-          class="field-input"
-          id="fixed-class"
-          type="text"
-          placeholder="e.g. 8"
-        >
+        <label class="field-label">Class</label>
+        <input class="field-input" id="fixed-class" type="text" placeholder="e.g. 8">
       </div>
-
       <div class="field">
-        <label class="field-label">
-          Subject
-        </label>
-
-        <input
-          class="field-input"
-          id="f-subject"
-          type="text"
-          placeholder="Subject"
-        >
+        <label class="field-label">Subject</label>
+        <input class="field-input" id="f-subject" type="text" placeholder="Subject">
       </div>
-
     </div>
 
     <hr class="divider">
 
-    <!-- STEP 2 -->
-
-    <div class="section-label">
-      Upload Photo
-    </div>
-
+    <!-- UPLOAD -->
+    <div class="section-label">Upload Photo</div>
     <div class="upload-area" id="upload-area">
-
-      <input
-        type="file"
-        accept="image/*"
-        id="f-photo"
-        onchange="handlePhoto(this)"
-      >
-
-      <div class="upload-icon" id="upload-icon">
-        ⬆
-      </div>
-
-      <div class="upload-text" id="upload-text">
-        <strong>Tap to upload photo</strong><br>
-        Upload first to continue
-      </div>
-
+      <input type="file" accept="image/*" id="f-photo" onchange="handlePhoto(this)">
+      <div class="upload-icon" id="upload-icon">⬆</div>
+      <div class="upload-text" id="upload-text"><strong>Tap to upload photo</strong><br>Upload first to continue</div>
       <img class="preview-img" id="preview-img">
-
       <div class="file-name" id="file-name"></div>
-
     </div>
 
-    <!-- STEP 3 -->
-
+    <!-- TEACHER -->
     <div id="teacher-section" class="hidden">
-
       <hr class="divider">
-
-      <div class="section-label">
-        Teacher Information
-      </div>
-
+      <div class="section-label">Teacher Information</div>
       <div class="field">
-
-        <label class="field-label">
-          Teacher Name
-        </label>
-
-        <input
-          class="field-input"
-          id="f-teacher"
-          type="text"
-          placeholder="Teacher name"
-          oninput="showStudentsSection()"
-        >
-
+        <label class="field-label">Teacher Name</label>
+        <input class="field-input" id="f-teacher" type="text" placeholder="Teacher name" oninput="showStudentsSection()">
       </div>
-
     </div>
 
-    <!-- STEP 4 -->
-
+    <!-- STUDENTS -->
     <div id="students-section" class="hidden">
-
       <hr class="divider">
-
-      <div class="section-label">
-        Students
-      </div>
-
+      <div class="section-label">Students</div>
       <div id="students-wrap"></div>
-
-      <button class="add-btn" onclick="addStudent()">
-        + Add Another Student
-      </button>
-
-      <button class="submit-btn" onclick="submitForm()">
-        Submit All Stars
-      </button>
-
+      <button class="add-btn" onclick="addStudent()">+ Add Another Student</button>
+      <button class="submit-btn" id="submit-btn" onclick="submitForm()">Submit All Stars</button>
     </div>
 
   </div>
@@ -492,332 +117,207 @@ html,body{
 
 <script>
 
-/* GOOGLE SCRIPT */
-
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznyfUbjPXADVeZgfnfDUaeJAwCPoNwQFMVJaEtDh0YLrYa6SosaW8LbYqzoR2jCRks/exec";
-
-/* PHOTO */
 
 let photoBase64 = '';
 let photoName = '';
 
-function handlePhoto(input){
+/* ---------- PHOTO ---------- */
+function handlePhoto(input) {
+  const cls = document.getElementById('fixed-class').value.trim();
+  const subject = document.getElementById('f-subject').value.trim();
 
-  const cls =
-  document.getElementById('fixed-class')
-  .value.trim();
-
-  const subject =
-  document.getElementById('f-subject')
-  .value.trim();
-
-  if(!cls || !subject){
-
-    showToast(
-      'Please fill class and subject first',
-      'err'
-    );
-
-    input.value='';
-
+  if (!cls || !subject) {
+    showToast('Please fill class and subject first', 'err');
+    input.value = '';
     return;
   }
 
   const file = input.files[0];
-
-  if(!file) return;
+  if (!file) return;
 
   const reader = new FileReader();
-
-  reader.onload = function(e){
-
-    photoBase64 =
-    e.target.result.split(',')[1];
-
+  reader.onload = function(e) {
+    photoBase64 = e.target.result.split(',')[1];
     photoName = file.name;
 
-    const img =
-    document.getElementById('preview-img');
-
+    const img = document.getElementById('preview-img');
     img.src = e.target.result;
+    img.style.display = 'block';
 
-    img.style.display='block';
+    document.getElementById('upload-icon').style.display = 'none';
+    document.getElementById('upload-text').style.display = 'none';
 
-    document.getElementById('upload-icon')
-    .style.display='none';
-
-    document.getElementById('upload-text')
-    .style.display='none';
-
-    const fn =
-    document.getElementById('file-name');
-
+    const fn = document.getElementById('file-name');
     fn.textContent = file.name;
+    fn.style.display = 'block';
 
-    fn.style.display='block';
-
-    document.getElementById('upload-area')
-    .classList.add('has-photo');
-
-    /* SHOW TEACHER SECTION */
-
-    document.getElementById('teacher-section')
-    .classList.remove('hidden');
-  }
-
+    document.getElementById('upload-area').classList.add('has-photo');
+    document.getElementById('teacher-section').classList.remove('hidden');
+  };
   reader.readAsDataURL(file);
 }
 
-/* SHOW STUDENTS */
-
+/* ---------- STUDENTS SECTION ---------- */
 let studentSectionShown = false;
 
-function showStudentsSection(){
-
-  const teacher =
-  document.getElementById('f-teacher')
-  .value.trim();
-
-  if(teacher && !studentSectionShown){
-
+function showStudentsSection() {
+  const teacher = document.getElementById('f-teacher').value.trim();
+  if (teacher && !studentSectionShown) {
     studentSectionShown = true;
-
-    document.getElementById('students-section')
-    .classList.remove('hidden');
-
+    document.getElementById('students-section').classList.remove('hidden');
     addStudent();
   }
 }
 
-/* TOAST */
-
-function showToast(msg,type){
-
-  const t =
-  document.getElementById('toast');
-
+/* ---------- TOAST ---------- */
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
   t.textContent = msg;
-
-  t.className = `toast ${type}`;
-
-  t.style.display='block';
-
-  setTimeout(()=>{
-    t.style.display='none';
-  },4000);
+  t.className = 'toast ' + type;
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 4000);
 }
 
-/* STUDENTS */
-
+/* ---------- ADD STUDENT ---------- */
 let studentCount = 0;
 
-function addStudent(){
-
+function addStudent() {
   studentCount++;
-
-  const div =
-  document.createElement('div');
-
-  div.className='student-box';
-
+  const div = document.createElement('div');
+  div.className = 'student-box';
   div.innerHTML = `
-
     <div class="student-head">
-
-      <div class="student-title">
-        Student ${studentCount}
-      </div>
-
-      ${
-        studentCount > 1
-        ?
-        `
-        <button
-          class="remove-btn"
-          onclick="this.parentElement.parentElement.remove()"
-        >
-          Remove
-        </button>
-        `
-        :
-        ``
-      }
-
+      <div class="student-title">Student ${studentCount}</div>
+      ${studentCount > 1 ? `<button class="remove-btn" onclick="this.parentElement.parentElement.remove()">Remove</button>` : ''}
     </div>
-
     <div class="field">
-
-      <label class="field-label">
-        Student Name
-      </label>
-
-      <input
-        class="field-input student-name"
-        type="text"
-        placeholder="Enter student name"
-      >
-
+      <label class="field-label">Student Name</label>
+      <input class="field-input student-name" type="text" placeholder="Enter student name">
     </div>
-
     <div class="field">
-
-      <label class="field-label">
-        Star Amount
-      </label>
-
+      <label class="field-label">Star Amount</label>
       <div class="amt-wrap">
-
         <span class="amt-prefix">#</span>
-
-        <input
-          class="field-input student-amount"
-          type="number"
-          placeholder="0"
-        >
-
+        <input class="field-input student-amount" type="number" placeholder="0" min="1">
       </div>
-
     </div>
   `;
-
-  document.getElementById('students-wrap')
-  .appendChild(div);
+  document.getElementById('students-wrap').appendChild(div);
 }
 
-/* DATE */
+/* ---------- DATE HELPERS ---------- */
+function pad(n) { return String(n).padStart(2, '0'); }
 
-function pad(n){
-  return String(n).padStart(2,'0');
-}
-
-function getToday(){
-
+function getToday() {
   const d = new Date();
-
   return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 }
 
-function getExpiry(){
-
+function getExpiry() {
   const d = new Date();
-
-  d.setMonth(d.getMonth()+6);
-
+  d.setMonth(d.getMonth() + 6);
   return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 }
 
-function getTimestamp(){
-
+function getTimestamp() {
   const d = new Date();
-
   return `${getToday()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
-/* SUBMIT */
+/* ---------- SUBMIT ---------- */
+async function submitForm() {
+  const cls     = document.getElementById('fixed-class').value.trim();
+  const subject = document.getElementById('f-subject').value.trim();
+  const teacher = document.getElementById('f-teacher').value.trim();
 
-async function submitForm(){
+  if (!cls || !subject || !teacher) {
+    showToast('Please fill class, subject and teacher', 'err');
+    return;
+  }
 
-  const cls =
-  document.getElementById('fixed-class')
-  .value.trim();
+  if (!photoBase64) {
+    showToast('Please upload a photo first', 'err');
+    return;
+  }
 
-  const subject =
-  document.getElementById('f-subject')
-  .value.trim();
-
-  const teacher =
-  document.getElementById('f-teacher')
-  .value.trim();
-
-  const names =
-  document.querySelectorAll('.student-name');
-
-  const amounts =
-  document.querySelectorAll('.student-amount');
-
+  const names   = document.querySelectorAll('.student-name');
+  const amounts = document.querySelectorAll('.student-amount');
   const students = [];
 
-  for(let i=0;i<names.length;i++){
+  for (let i = 0; i < names.length; i++) {
+    const name   = names[i].value.trim();
+    const amount = amounts[i].value.trim();
 
-    const name =
-    names[i].value.trim();
-
-    const amount =
-    amounts[i].value.trim();
-
-    if(!name || !amount){
-
-      showToast(
-        'Please fill all student details',
-        'err'
-      );
-
+    if (!name || !amount) {
+      showToast('Please fill all student details', 'err');
       return;
     }
 
     students.push({
-
-      timestamp:getTimestamp(),
-
-      date:getToday(),
-
-      student_name:name,
-
-      class:cls,
-
-      star_type:'normal_star',
-
-      amount:Number(amount),
-
-      reason:'micro test',
-
-      expiry_date:getExpiry(),
-
-      active:'active',
-
-      teacher_name:teacher,
-
-      subject:subject,
-
-      photo:photoBase64,
-
-      photo_name:photoName
+      timestamp:    getTimestamp(),
+      date:         getToday(),
+      student_name: name,
+      class:        cls,
+      star_type:    'normal_star',
+      amount:       Number(amount),
+      reason:       'micro test',
+      expiry_date:  getExpiry(),
+      active:       'active',
+      teacher_name: teacher,
+      subject:      subject,
+      photo:        photoBase64,
+      photo_name:   photoName
     });
   }
 
-  try{
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Submitting…';
+  btn.disabled = true;
 
-    await fetch(SCRIPT_URL,{
-
-      method:'POST',
-
-      mode:'no-cors',
-
-      headers:{
-        'Content-Type':'application/json'
-      },
-
-      body:JSON.stringify({
-        students:students
-      })
-
+  try {
+    await fetch(SCRIPT_URL, {
+      method:  'POST',
+      mode:    'no-cors',          // Google Apps Script requires no-cors
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ students })
     });
 
-    showToast(
-      'All stars submitted successfully!',
-      'ok'
-    );
+    // With no-cors we always get an opaque response — reaching here means the
+    // request was sent successfully.
+    showToast('All stars submitted successfully! ✅', 'ok');
 
-  }catch(e){
+    // Reset form
+    resetForm();
 
-    showToast(
-      'Network error occurred',
-      'err'
-    );
+  } catch (e) {
+    showToast('Network error: ' + e.message, 'err');
+  } finally {
+    btn.textContent = 'Submit All Stars';
+    btn.disabled = false;
   }
 }
 
-</script>
+/* ---------- RESET ---------- */
+function resetForm() {
+  document.getElementById('fixed-class').value = '';
+  document.getElementById('f-subject').value = '';
+  document.getElementById('f-teacher').value = '';
+  document.getElementById('f-photo').value = '';
+  document.getElementById('preview-img').style.display = 'none';
+  document.getElementById('upload-icon').style.display = 'flex';
+  document.getElementById('upload-text').style.display = 'block';
+  document.getElementById('file-name').style.display = 'none';
+  document.getElementById('upload-area').classList.remove('has-photo');
+  document.getElementById('teacher-section').classList.add('hidden');
+  document.getElementById('students-section').classList.add('hidden');
+  document.getElementById('students-wrap').innerHTML = '';
+  photoBase64 = '';
+  photoName = '';
+  studentCount = 0;
+  studentSectionShown = false;
+}
 
+</script>
 </body>
 </html>
