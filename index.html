@@ -248,7 +248,7 @@ html,body{
   display:none;
 }
 
-/* STUDENT BOX */
+/* STUDENTS */
 
 .student-box{
   border:1px solid var(--border);
@@ -335,7 +335,7 @@ html,body{
   color:var(--danger);
 }
 
-/* HIDDEN AREA */
+/* HIDDEN */
 
 .hidden{
   display:none;
@@ -402,19 +402,6 @@ html,body{
 
     </div>
 
-    <div class="field">
-      <label class="field-label">
-        Teacher Name
-      </label>
-
-      <input
-        class="field-input"
-        id="f-teacher"
-        type="text"
-        placeholder="Teacher name"
-      >
-    </div>
-
     <hr class="divider">
 
     <!-- STEP 2 -->
@@ -447,9 +434,37 @@ html,body{
 
     </div>
 
-    <!-- HIDDEN CONTENT -->
+    <!-- STEP 3 -->
 
-    <div id="dynamic-section" class="hidden">
+    <div id="teacher-section" class="hidden">
+
+      <hr class="divider">
+
+      <div class="section-label">
+        Teacher Information
+      </div>
+
+      <div class="field">
+
+        <label class="field-label">
+          Teacher Name
+        </label>
+
+        <input
+          class="field-input"
+          id="f-teacher"
+          type="text"
+          placeholder="Teacher name"
+          oninput="showStudentsSection()"
+        >
+
+      </div>
+
+    </div>
+
+    <!-- STEP 4 -->
+
+    <div id="students-section" class="hidden">
 
       <hr class="divider">
 
@@ -477,7 +492,7 @@ html,body{
 
 <script>
 
-/* GOOGLE SCRIPT URL */
+/* GOOGLE SCRIPT */
 
 const SCRIPT_URL =
 "YOUR_GOOGLE_SCRIPT_URL";
@@ -497,14 +512,10 @@ function handlePhoto(input){
   document.getElementById('f-subject')
   .value.trim();
 
-  const teacher =
-  document.getElementById('f-teacher')
-  .value.trim();
-
-  if(!cls || !subject || !teacher){
+  if(!cls || !subject){
 
     showToast(
-      'Please fill class, subject and teacher first',
+      'Please fill class and subject first',
       'err'
     );
 
@@ -549,17 +560,34 @@ function handlePhoto(input){
     document.getElementById('upload-area')
     .classList.add('has-photo');
 
-    /* SHOW NEXT SECTION */
+    /* SHOW TEACHER SECTION */
 
-    document.getElementById('dynamic-section')
+    document.getElementById('teacher-section')
     .classList.remove('hidden');
-
-    if(studentCount === 0){
-      addStudent();
-    }
   }
 
   reader.readAsDataURL(file);
+}
+
+/* SHOW STUDENTS */
+
+let studentSectionShown = false;
+
+function showStudentsSection(){
+
+  const teacher =
+  document.getElementById('f-teacher')
+  .value.trim();
+
+  if(teacher && !studentSectionShown){
+
+    studentSectionShown = true;
+
+    document.getElementById('students-section')
+    .classList.remove('hidden');
+
+    addStudent();
+  }
 }
 
 /* TOAST */
@@ -604,12 +632,14 @@ function addStudent(){
       ${
         studentCount > 1
         ?
-        `<button
+        `
+        <button
           class="remove-btn"
           onclick="this.parentElement.parentElement.remove()"
         >
           Remove
-        </button>`
+        </button>
+        `
         :
         ``
       }
