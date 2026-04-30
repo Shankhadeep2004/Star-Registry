@@ -6,7 +6,7 @@
 
 <title>Star Registry</title>
 
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
 
 <style>
 
@@ -37,7 +37,6 @@ html,body{
   background:var(--bg);
   font-family:'DM Sans',sans-serif;
   color:var(--text);
-  -webkit-font-smoothing:antialiased;
 }
 
 .shell{
@@ -67,17 +66,6 @@ html,body{
   background:rgba(255,255,255,0.06);
 }
 
-.header::after{
-  content:'';
-  position:absolute;
-  bottom:-30px;
-  left:20px;
-  width:100px;
-  height:100px;
-  border-radius:50%;
-  background:rgba(255,255,255,0.04);
-}
-
 .badge{
   display:inline-flex;
   align-items:center;
@@ -91,12 +79,6 @@ html,body{
   text-transform:uppercase;
   margin-bottom:14px;
   font-weight:500;
-}
-
-.badge svg{
-  width:11px;
-  height:11px;
-  flex-shrink:0;
 }
 
 .header-title{
@@ -120,8 +102,6 @@ html,body{
   border-radius:var(--radius-lg);
   border:0.5px solid var(--border);
   padding:22px 20px;
-  position:relative;
-  z-index:1;
   box-shadow:0 2px 12px rgba(0,0,0,0.06);
 }
 
@@ -132,34 +112,6 @@ html,body{
   letter-spacing:1.2px;
   color:var(--green);
   margin-bottom:12px;
-}
-
-.auto-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-bottom:18px;
-}
-
-.auto-item{
-  background:var(--bg);
-  border-radius:var(--radius);
-  border:0.5px solid var(--border);
-  padding:10px 12px;
-}
-
-.auto-item-label{
-  font-size:10px;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:0.5px;
-  margin-bottom:3px;
-}
-
-.auto-item-value{
-  font-size:13px;
-  font-weight:500;
-  color:var(--text);
 }
 
 .divider{
@@ -194,7 +146,6 @@ html,body{
   font-family:'DM Sans',sans-serif;
   outline:none;
   transition:all 0.15s;
-  appearance:none;
 }
 
 .field-input:focus{
@@ -256,8 +207,6 @@ html,body{
   inset:0;
   opacity:0;
   cursor:pointer;
-  width:100%;
-  height:100%;
 }
 
 .upload-icon{
@@ -297,7 +246,6 @@ html,body{
   margin-top:8px;
   font-weight:500;
   display:none;
-  word-break:break-all;
 }
 
 /* STUDENT BOX */
@@ -334,27 +282,7 @@ html,body{
   font-weight:600;
 }
 
-/* BUTTON */
-
-.submit-btn{
-  width:100%;
-  height:54px;
-  border-radius:var(--radius);
-  border:none;
-  background:var(--green);
-  color:white;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin-top:18px;
-}
-
-.submit-btn:hover{
-  background:#145c31;
-}
+/* BUTTONS */
 
 .add-btn{
   width:100%;
@@ -369,6 +297,25 @@ html,body{
   margin-top:10px;
 }
 
+.submit-btn{
+  width:100%;
+  height:54px;
+  border-radius:var(--radius);
+  border:none;
+  background:var(--green);
+  color:white;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  margin-top:18px;
+}
+
+.submit-btn:hover{
+  background:#145c31;
+}
+
+/* TOAST */
+
 .toast{
   margin:0 14px 16px;
   border-radius:var(--radius);
@@ -376,7 +323,6 @@ html,body{
   font-size:14px;
   font-weight:500;
   display:none;
-  line-height:1.5;
 }
 
 .toast.ok{
@@ -389,6 +335,12 @@ html,body{
   color:var(--danger);
 }
 
+/* HIDDEN AREA */
+
+.hidden{
+  display:none;
+}
+
 </style>
 </head>
 
@@ -399,13 +351,12 @@ html,body{
   <div class="header">
 
     <div class="badge">
-      <svg viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-      </svg>
-      Star Registry
+      ⭐ Star Registry
     </div>
 
-    <div class="header-title">Award Stars</div>
+    <div class="header-title">
+      Award Stars
+    </div>
 
     <div class="header-sub">
       Add multiple students instantly
@@ -415,88 +366,79 @@ html,body{
 
   <div class="card">
 
-    <div class="section-label">Auto-filled</div>
+    <!-- STEP 1 -->
 
-    <div class="auto-grid">
-
-      <div class="auto-item">
-        <div class="auto-item-label">Date</div>
-        <div class="auto-item-value" id="disp-date"></div>
-      </div>
-
-      <div class="auto-item">
-        <div class="auto-item-label">Star type</div>
-        <div class="auto-item-value">Normal star</div>
-      </div>
-
-      <div class="auto-item">
-        <div class="auto-item-label">Reason</div>
-        <div class="auto-item-value">Micro test</div>
-      </div>
-
-      <div class="auto-item">
-        <div class="auto-item-label">Expiry</div>
-        <div class="auto-item-value" id="disp-exp"></div>
-      </div>
-
+    <div class="section-label">
+      Basic Information
     </div>
-
-    <hr class="divider">
-
-    <!-- FIXED CLASS -->
-
-    <div class="section-label">Selected Class</div>
-
-    <div class="auto-grid">
-      <div class="auto-item" style="grid-column:1/3;">
-        <div class="auto-item-label">Current Class</div>
-        <div class="auto-item-value" id="class-display"></div>
-      </div>
-    </div>
-
-    <hr class="divider">
-
-    <!-- TEACHER -->
-
-    <div class="section-label">Teacher Info</div>
 
     <div class="row2">
 
       <div class="field">
-        <label class="field-label">Teacher name</label>
-        <input class="field-input" id="f-teacher" type="text" placeholder="Teacher name">
+        <label class="field-label">
+          Class
+        </label>
+
+        <input
+          class="field-input"
+          id="fixed-class"
+          type="text"
+          placeholder="e.g. 8"
+        >
       </div>
 
       <div class="field">
-        <label class="field-label">Subject</label>
-        <input class="field-input" id="f-subject" type="text" placeholder="Subject">
+        <label class="field-label">
+          Subject
+        </label>
+
+        <input
+          class="field-input"
+          id="f-subject"
+          type="text"
+          placeholder="Subject"
+        >
       </div>
 
     </div>
 
+    <div class="field">
+      <label class="field-label">
+        Teacher Name
+      </label>
+
+      <input
+        class="field-input"
+        id="f-teacher"
+        type="text"
+        placeholder="Teacher name"
+      >
+    </div>
+
     <hr class="divider">
 
-    <!-- PHOTO -->
+    <!-- STEP 2 -->
 
-    <div class="section-label">Supporting Photo</div>
+    <div class="section-label">
+      Upload Photo
+    </div>
 
     <div class="upload-area" id="upload-area">
 
-      <input type="file" accept="image/*" id="f-photo" onchange="handlePhoto(this)">
+      <input
+        type="file"
+        accept="image/*"
+        id="f-photo"
+        onchange="handlePhoto(this)"
+      >
 
       <div class="upload-icon" id="upload-icon">
-
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="17 8 12 3 7 8"/>
-          <line x1="12" y1="3" x2="12" y2="15"/>
-        </svg>
-
+        ⬆
       </div>
 
       <div class="upload-text" id="upload-text">
         <strong>Tap to upload photo</strong><br>
-        JPG, PNG, HEIC supported
+        Upload first to continue
       </div>
 
       <img class="preview-img" id="preview-img">
@@ -505,21 +447,27 @@ html,body{
 
     </div>
 
-    <hr class="divider">
+    <!-- HIDDEN CONTENT -->
 
-    <!-- STUDENTS -->
+    <div id="dynamic-section" class="hidden">
 
-    <div class="section-label">Students</div>
+      <hr class="divider">
 
-    <div id="students-wrap"></div>
+      <div class="section-label">
+        Students
+      </div>
 
-    <button class="add-btn" onclick="addStudent()">
-      + Add Another Student
-    </button>
+      <div id="students-wrap"></div>
 
-    <button class="submit-btn" onclick="submitForm()">
-      Submit All Stars
-    </button>
+      <button class="add-btn" onclick="addStudent()">
+        + Add Another Student
+      </button>
+
+      <button class="submit-btn" onclick="submitForm()">
+        Submit All Stars
+      </button>
+
+    </div>
 
   </div>
 
@@ -531,11 +479,181 @@ html,body{
 
 /* GOOGLE SCRIPT URL */
 
-const SCRIPT_URL = "YOUR_GOOGLE_SCRIPT_URL";
+const SCRIPT_URL =
+"YOUR_GOOGLE_SCRIPT_URL";
 
-/* FIXED CLASS */
+/* PHOTO */
 
-const FIXED_CLASS = "8";
+let photoBase64 = '';
+let photoName = '';
+
+function handlePhoto(input){
+
+  const cls =
+  document.getElementById('fixed-class')
+  .value.trim();
+
+  const subject =
+  document.getElementById('f-subject')
+  .value.trim();
+
+  const teacher =
+  document.getElementById('f-teacher')
+  .value.trim();
+
+  if(!cls || !subject || !teacher){
+
+    showToast(
+      'Please fill class, subject and teacher first',
+      'err'
+    );
+
+    input.value='';
+
+    return;
+  }
+
+  const file = input.files[0];
+
+  if(!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(e){
+
+    photoBase64 =
+    e.target.result.split(',')[1];
+
+    photoName = file.name;
+
+    const img =
+    document.getElementById('preview-img');
+
+    img.src = e.target.result;
+
+    img.style.display='block';
+
+    document.getElementById('upload-icon')
+    .style.display='none';
+
+    document.getElementById('upload-text')
+    .style.display='none';
+
+    const fn =
+    document.getElementById('file-name');
+
+    fn.textContent = file.name;
+
+    fn.style.display='block';
+
+    document.getElementById('upload-area')
+    .classList.add('has-photo');
+
+    /* SHOW NEXT SECTION */
+
+    document.getElementById('dynamic-section')
+    .classList.remove('hidden');
+
+    if(studentCount === 0){
+      addStudent();
+    }
+  }
+
+  reader.readAsDataURL(file);
+}
+
+/* TOAST */
+
+function showToast(msg,type){
+
+  const t =
+  document.getElementById('toast');
+
+  t.textContent = msg;
+
+  t.className = `toast ${type}`;
+
+  t.style.display='block';
+
+  setTimeout(()=>{
+    t.style.display='none';
+  },4000);
+}
+
+/* STUDENTS */
+
+let studentCount = 0;
+
+function addStudent(){
+
+  studentCount++;
+
+  const div =
+  document.createElement('div');
+
+  div.className='student-box';
+
+  div.innerHTML = `
+
+    <div class="student-head">
+
+      <div class="student-title">
+        Student ${studentCount}
+      </div>
+
+      ${
+        studentCount > 1
+        ?
+        `<button
+          class="remove-btn"
+          onclick="this.parentElement.parentElement.remove()"
+        >
+          Remove
+        </button>`
+        :
+        ``
+      }
+
+    </div>
+
+    <div class="field">
+
+      <label class="field-label">
+        Student Name
+      </label>
+
+      <input
+        class="field-input student-name"
+        type="text"
+        placeholder="Enter student name"
+      >
+
+    </div>
+
+    <div class="field">
+
+      <label class="field-label">
+        Star Amount
+      </label>
+
+      <div class="amt-wrap">
+
+        <span class="amt-prefix">#</span>
+
+        <input
+          class="field-input student-amount"
+          type="number"
+          placeholder="0"
+        >
+
+      </div>
+
+    </div>
+  `;
+
+  document.getElementById('students-wrap')
+  .appendChild(div);
+}
 
 /* DATE */
 
@@ -566,180 +684,21 @@ function getTimestamp(){
   return `${getToday()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
-/* AUTO FILL */
-
-document.getElementById('disp-date').textContent = getToday();
-
-document.getElementById('disp-exp').textContent = getExpiry();
-
-document.getElementById('class-display').textContent =
-`Class ${FIXED_CLASS}`;
-
-/* PHOTO */
-
-let photoBase64 = '';
-let photoName = '';
-
-function handlePhoto(input){
-
-  const file = input.files[0];
-
-  if(!file) return;
-
-  const reader = new FileReader();
-
-  reader.onload = function(e){
-
-    photoBase64 = e.target.result.split(',')[1];
-
-    photoName = file.name;
-
-    const img = document.getElementById('preview-img');
-
-    img.src = e.target.result;
-
-    img.style.display = 'block';
-
-    document.getElementById('upload-icon').style.display='none';
-
-    document.getElementById('upload-text').style.display='none';
-
-    const fn = document.getElementById('file-name');
-
-    fn.textContent = file.name;
-
-    fn.style.display='block';
-
-    document.getElementById('upload-area')
-    .classList.add('has-photo');
-  }
-
-  reader.readAsDataURL(file);
-}
-
-/* TOAST */
-
-function showToast(msg,type){
-
-  const t = document.getElementById('toast');
-
-  t.textContent = msg;
-
-  t.className = `toast ${type}`;
-
-  t.style.display='block';
-
-  setTimeout(()=>{
-    t.style.display='none';
-  },4000);
-}
-
-/* STUDENTS */
-
-let studentCount = 0;
-
-function addStudent(name='',amount=''){
-
-  studentCount++;
-
-  const div = document.createElement('div');
-
-  div.className = 'student-box';
-
-  div.innerHTML = `
-
-    <div class="student-head">
-
-      <div class="student-title">
-        Student ${studentCount}
-      </div>
-
-      ${
-        studentCount > 1
-        ?
-        `<button class="remove-btn" onclick="this.parentElement.parentElement.remove()">
-          Remove
-        </button>`
-        :
-        ``
-      }
-
-    </div>
-
-    <div class="field">
-
-      <label class="field-label">
-        Student Name
-      </label>
-
-      <input
-        class="field-input student-name"
-        type="text"
-        placeholder="Enter student name"
-        value="${name}"
-      >
-
-    </div>
-
-    <div class="field">
-
-      <label class="field-label">
-        Star Amount
-      </label>
-
-      <div class="amt-wrap">
-
-        <span class="amt-prefix">#</span>
-
-        <input
-          class="field-input student-amount"
-          type="number"
-          placeholder="0"
-          value="${amount}"
-        >
-
-      </div>
-
-    </div>
-  `;
-
-  document.getElementById('students-wrap')
-  .appendChild(div);
-}
-
-addStudent();
-
 /* SUBMIT */
 
 async function submitForm(){
 
-  const teacher =
-  document.getElementById('f-teacher')
+  const cls =
+  document.getElementById('fixed-class')
   .value.trim();
 
   const subject =
   document.getElementById('f-subject')
   .value.trim();
 
-  if(!teacher || !subject){
-
-    showToast(
-      'Please fill teacher information',
-      'err'
-    );
-
-    return;
-  }
-
-  if(!photoBase64){
-
-    showToast(
-      'Please upload supporting photo',
-      'err'
-    );
-
-    return;
-  }
+  const teacher =
+  document.getElementById('f-teacher')
+  .value.trim();
 
   const names =
   document.querySelectorAll('.student-name');
@@ -751,9 +710,11 @@ async function submitForm(){
 
   for(let i=0;i<names.length;i++){
 
-    const name = names[i].value.trim();
+    const name =
+    names[i].value.trim();
 
-    const amount = amounts[i].value.trim();
+    const amount =
+    amounts[i].value.trim();
 
     if(!name || !amount){
 
@@ -773,7 +734,7 @@ async function submitForm(){
 
       student_name:name,
 
-      class:FIXED_CLASS,
+      class:cls,
 
       star_type:'normal_star',
 
