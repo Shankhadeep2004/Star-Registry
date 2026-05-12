@@ -34,6 +34,8 @@ html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-s
 .amt-wrap { position:relative; }
 .amt-prefix { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:15px; color:var(--muted); font-weight:600; pointer-events:none; }
 .amt-wrap .field-input { padding-left:28px; }
+
+/* UPLOAD — gallery files only, no camera */
 #f-photo { display:none; }
 .upload-label { display:block; border:1.5px dashed var(--border-md); border-radius:var(--radius); padding:26px 16px; text-align:center; cursor:pointer; background:var(--bg); transition:all 0.2s; -webkit-tap-highlight-color:transparent; }
 .upload-label:hover { border-color:var(--green-mid); background:var(--green-light); }
@@ -45,6 +47,7 @@ html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-s
 .preview-img { width:100%; max-height:180px; object-fit:cover; border-radius:10px; display:none; }
 .file-name { font-size:12px; color:var(--green); margin-top:8px; font-weight:600; display:none; }
 .change-photo-btn { display:none; margin-top:10px; width:100%; height:36px; border-radius:8px; border:1px solid var(--border-md); background:white; color:var(--muted); font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+
 .student-box { border:1px solid var(--border); background:var(--bg); border-radius:14px; padding:14px; margin-bottom:12px; animation:slideIn 0.25s ease; }
 .student-box:focus-within { border-color:rgba(45,150,83,0.4); }
 @keyframes slideIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
@@ -53,6 +56,7 @@ html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-s
 .remove-btn { border:none; background:#fee2e2; color:#dc2626; padding:6px 12px; border-radius:8px; font-size:12px; cursor:pointer; font-weight:600; }
 .add-btn { width:100%; height:48px; border-radius:var(--radius); border:1.5px dashed var(--green-mid); background:var(--green-pale); color:var(--green); font-size:14px; font-weight:600; cursor:pointer; margin-top:4px; font-family:'DM Sans',sans-serif; }
 .add-btn:hover { background:var(--green-light); }
+
 .progress-section { display:none; margin-top:20px; }
 .progress-section.visible { display:block; animation:fadeIn 0.3s ease; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
@@ -72,6 +76,7 @@ html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-s
 .prog-step.active .prog-step-label { color:var(--green); }
 .prog-step.done   .prog-step-label { color:#1a6b3a; }
 .prog-step.error  .prog-step-label { color:var(--danger); }
+
 .submit-btn { width:100%; height:54px; border-radius:var(--radius); border:none; background:var(--green); color:white; font-size:16px; font-weight:600; cursor:pointer; margin-top:18px; transition:all 0.2s; font-family:'DM Sans',sans-serif; }
 .submit-btn:hover:not(:disabled) { background:#145c31; transform:translateY(-1px); box-shadow:0 4px 16px rgba(26,107,58,0.3); }
 .submit-btn:disabled { background:#6b9e7e; cursor:not-allowed; }
@@ -107,8 +112,7 @@ html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-s
     <hr class="divider">
 
     <div class="section-label">Upload Photo</div>
-    <!-- NO capture attribute = opens file picker / gallery only, not camera -->
-    <input type="file" id="f-photo" accept="image/*">
+    <input type="file" id="f-photo" accept="image/jpeg,image/png,image/gif,image/webp">
     <label class="upload-label" id="upload-label" for="f-photo" onclick="return checkBeforeUpload(event)">
       <div id="upload-placeholder">
         <div class="upload-icon-wrap">&#128444;</div>
@@ -121,7 +125,7 @@ html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-s
       <div class="file-name" id="file-name"></div>
     </label>
     <button class="change-photo-btn" id="change-photo-btn" type="button" onclick="document.getElementById('f-photo').click()">
-      &#8635; Change Photo
+      Change Photo
     </button>
 
     <div id="teacher-section" class="hidden">
@@ -199,7 +203,7 @@ document.getElementById("f-photo").addEventListener("change", function() {
     img.src = ev.target.result; img.style.display = "block";
     document.getElementById("upload-placeholder").style.display = "none";
     const fn = document.getElementById("file-name");
-    fn.textContent = "OK " + file.name; fn.style.display = "block";
+    fn.textContent = "Selected: " + file.name; fn.style.display = "block";
     document.getElementById("upload-label").classList.add("has-photo");
     document.getElementById("change-photo-btn").style.display = "block";
     document.getElementById("teacher-section").classList.remove("hidden");
@@ -220,9 +224,7 @@ function addStudent() {
   studentCount++;
   const div = document.createElement("div");
   div.className = "student-box";
-  const removeBtn = studentCount > 1
-    ? '<button class="remove-btn" type="button">Remove</button>'
-    : '';
+  const removeBtn = studentCount > 1 ? '<button class="remove-btn" type="button">Remove</button>' : '';
   div.innerHTML = [
     '<div class="student-head">',
       '<div class="student-title">Student ' + studentCount + '</div>',
@@ -254,7 +256,7 @@ function setStep(n, state) {
   const s = document.getElementById("step-"+n), ic = document.getElementById("step-icon-"+n);
   if (!s || !ic) return;
   s.className = "prog-step " + state;
-  ic.textContent = state==="done" ? "OK" : state==="error" ? "X" : String(n);
+  ic.textContent = state==="done" ? "✓" : state==="error" ? "✕" : String(n);
   if (BAR_PCT[n]) setBar(BAR_PCT[n]);
 }
 function resetSteps() {
