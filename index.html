@@ -13,14 +13,16 @@
   --text:#111827; --muted:#6b7280; --danger:#dc2626; --danger-bg:#fef2f2;
   --radius:12px; --radius-lg:18px;
 }
-html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-serif; color:var(--text); }
+html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-serif; color:var(--text); -webkit-font-smoothing:antialiased; }
 .shell { max-width:430px; margin:0 auto; min-height:100vh; padding-bottom:40px; }
+
 .header { background:var(--green); padding:36px 22px 52px; position:relative; overflow:hidden; }
 .header::before { content:''; position:absolute; top:-60px; right:-60px; width:200px; height:200px; border-radius:50%; background:rgba(255,255,255,0.06); }
 .header::after  { content:''; position:absolute; bottom:-40px; left:-30px; width:140px; height:140px; border-radius:50%; background:rgba(255,255,255,0.04); }
 .badge { display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.15); border-radius:20px; padding:5px 14px; font-size:11px; color:rgba(255,255,255,0.85); letter-spacing:0.8px; text-transform:uppercase; margin-bottom:16px; font-weight:600; }
 .header-title { font-family:'DM Serif Display',serif; font-size:34px; color:white; line-height:1.1; margin-bottom:8px; }
 .header-sub { font-size:13px; color:rgba(255,255,255,0.5); }
+
 .card { background:var(--surface); margin:-20px 14px 14px; border-radius:var(--radius-lg); border:0.5px solid var(--border); padding:24px 20px; box-shadow:0 4px 24px rgba(0,0,0,0.07); position:relative; z-index:1; }
 .section-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.4px; color:var(--green); margin-bottom:14px; }
 .divider { border:none; border-top:0.5px solid var(--border); margin:20px 0; }
@@ -35,18 +37,27 @@ html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-s
 .amt-prefix { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:15px; color:var(--muted); font-weight:600; pointer-events:none; }
 .amt-wrap .field-input { padding-left:28px; }
 
-/* UPLOAD — gallery files only, no camera */
+/* UPLOAD TABS */
+.upload-tabs { display:flex; gap:6px; margin-bottom:12px; }
+.upload-tab { flex:1; height:38px; border-radius:10px; border:1px solid var(--border-md); background:var(--bg); color:var(--muted); font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.15s; }
+.upload-tab.active { background:var(--green); color:white; border-color:var(--green); }
+
+/* PHOTO UPLOAD */
 #f-photo { display:none; }
+#f-file  { display:none; }
 .upload-label { display:block; border:1.5px dashed var(--border-md); border-radius:var(--radius); padding:26px 16px; text-align:center; cursor:pointer; background:var(--bg); transition:all 0.2s; -webkit-tap-highlight-color:transparent; }
 .upload-label:hover { border-color:var(--green-mid); background:var(--green-light); }
-.upload-label.has-photo { border-style:solid; border-color:var(--green-mid); background:var(--green-pale); padding:12px; }
+.upload-label.has-file { border-style:solid; border-color:var(--green-mid); background:var(--green-pale); padding:12px; }
 .upload-icon-wrap { width:46px; height:46px; border-radius:50%; background:var(--green-light); display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-size:22px; }
 .upload-label:hover .upload-icon-wrap { background:white; }
 .upload-text { font-size:13px; color:var(--muted); line-height:1.7; }
 .upload-text strong { color:var(--green); font-weight:600; display:block; font-size:14px; }
 .preview-img { width:100%; max-height:180px; object-fit:cover; border-radius:10px; display:none; }
-.file-name { font-size:12px; color:var(--green); margin-top:8px; font-weight:600; display:none; }
-.change-photo-btn { display:none; margin-top:10px; width:100%; height:36px; border-radius:8px; border:1px solid var(--border-md); background:white; color:var(--muted); font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+.file-name { font-size:12px; color:var(--green); margin-top:8px; font-weight:600; display:none; word-break:break-all; }
+.file-info-box { display:none; background:var(--green-pale); border:1px solid rgba(45,150,83,0.25); border-radius:10px; padding:12px 14px; margin-top:4px; }
+.file-info-box .fi-name { font-size:13px; font-weight:600; color:var(--green); margin-bottom:2px; word-break:break-all; }
+.file-info-box .fi-size { font-size:11px; color:var(--muted); }
+.change-btn { display:none; margin-top:10px; width:100%; height:36px; border-radius:8px; border:1px solid var(--border-md); background:white; color:var(--muted); font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
 
 .student-box { border:1px solid var(--border); background:var(--bg); border-radius:14px; padding:14px; margin-bottom:12px; animation:slideIn 0.25s ease; }
 .student-box:focus-within { border-color:rgba(45,150,83,0.4); }
@@ -92,7 +103,7 @@ html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-s
 <body>
 <div class="shell">
   <div class="header">
-    <div class="badge">&#11088; Star Registry</div>
+    <div class="badge">⭐ Star Registry</div>
     <div class="header-title">Award Stars</div>
     <div class="header-sub">Add multiple students instantly</div>
   </div>
@@ -109,28 +120,51 @@ html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-s
         <input class="field-input" id="f-subject" type="text" placeholder="Subject">
       </div>
     </div>
-    <hr class="divider">
 
-    <div class="section-label">Upload Photo</div>
-    <input type="file" id="f-photo" accept="image/jpeg,image/png,image/gif,image/webp">
-    <label class="upload-label" id="upload-label" for="f-photo" onclick="return checkBeforeUpload(event)">
-      <div id="upload-placeholder">
-        <div class="upload-icon-wrap">&#128444;</div>
-        <div class="upload-text">
-          <strong>Tap to choose from gallery</strong>
-          Select a saved photo from your device
+    <hr class="divider">
+    <div class="section-label">Attachment</div>
+
+    <!-- TABS -->
+    <div class="upload-tabs">
+      <button class="upload-tab active" id="tab-photo" type="button" onclick="switchTab('photo')">📷 Photo</button>
+      <button class="upload-tab" id="tab-file" type="button" onclick="switchTab('file')">📄 File</button>
+    </div>
+
+    <!-- PHOTO UPLOAD -->
+    <div id="photo-upload-area">
+      <input type="file" id="f-photo" accept="image/jpeg,image/png,image/gif,image/webp">
+      <label class="upload-label" id="upload-label-photo" for="f-photo" onclick="return checkBeforeUpload(event,'photo')">
+        <div id="upload-placeholder-photo">
+          <div class="upload-icon-wrap">🖼️</div>
+          <div class="upload-text">
+            <strong>Tap to choose a photo</strong>
+            Select JPG, PNG or GIF from your device
+          </div>
         </div>
-      </div>
-      <div style="margin-top:10px; padding:9px 12px; background:#fff8e1; border:1px solid #f6c90e; border-radius:9px; font-size:12px; color:#7a5c00; font-weight:500; line-height:1.5;">
-        &#9888;&#65039; Please <strong>do not use the camera</strong>. When the picker opens, select <strong>Files</strong> or <strong>Gallery</strong> to upload an existing photo.
-      </div
-      </div>
-      <img class="preview-img" id="preview-img" alt="Preview">
-      <div class="file-name" id="file-name"></div>
-    </label>
-    <button class="change-photo-btn" id="change-photo-btn" type="button" onclick="document.getElementById('f-photo').click()">
-      Change Photo
-    </button>
+        <img class="preview-img" id="preview-img" alt="Preview">
+        <div class="file-name" id="photo-file-name"></div>
+      </label>
+      <button class="change-btn" id="change-photo-btn" type="button" onclick="document.getElementById('f-photo').click()">Change Photo</button>
+    </div>
+
+    <!-- FILE UPLOAD -->
+    <div id="file-upload-area" class="hidden">
+      <input type="file" id="f-file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv">
+      <label class="upload-label" id="upload-label-file" for="f-file" onclick="return checkBeforeUpload(event,'file')">
+        <div id="upload-placeholder-file">
+          <div class="upload-icon-wrap">📎</div>
+          <div class="upload-text">
+            <strong>Tap to choose a file</strong>
+            PDF, Word, Excel, PowerPoint, TXT, CSV
+          </div>
+        </div>
+        <div class="file-info-box" id="file-info-box">
+          <div class="fi-name" id="fi-name"></div>
+          <div class="fi-size" id="fi-size"></div>
+        </div>
+      </label>
+      <button class="change-btn" id="change-file-btn" type="button" onclick="document.getElementById('f-file').click()">Change File</button>
+    </div>
 
     <div id="teacher-section" class="hidden">
       <hr class="divider">
@@ -151,7 +185,7 @@ html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-s
         <div class="prog-bar-track"><div class="prog-bar-fill" id="prog-bar"></div></div>
         <div class="prog-steps">
           <div class="prog-step" id="step-1"><div class="prog-step-icon" id="step-icon-1">1</div><div class="prog-step-label">Preparing student data</div></div>
-          <div class="prog-step" id="step-2"><div class="prog-step-icon" id="step-icon-2">2</div><div class="prog-step-label">Uploading photo to Drive</div></div>
+          <div class="prog-step" id="step-2"><div class="prog-step-icon" id="step-icon-2">2</div><div class="prog-step-label">Uploading attachment to Drive</div></div>
           <div class="prog-step" id="step-3"><div class="prog-step-icon" id="step-icon-3">3</div><div class="prog-step-label">Saving to spreadsheet</div></div>
           <div class="prog-step" id="step-4"><div class="prog-step-icon" id="step-icon-4">4</div><div class="prog-step-label">Confirming submission</div></div>
         </div>
@@ -166,8 +200,12 @@ html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-s
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznyfUbjPXADVeZgfnfDUaeJAwCPoNwQFMVJaEtDh0YLrYa6SosaW8LbYqzoR2jCRks/exec";
-let photoBase64 = "", photoName = "", studentCount = 0, studentSectionShown = false, isSubmitting = false;
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJl0AmHxG57H9xFNzjIa0F9ADraK4Ealuyh_jPW0S-PbMOK6pDcM7DzSgU2quXeaqbJA/exec";
+
+let attachBase64 = "", attachName = "", attachMime = "";
+let studentCount = 0, studentSectionShown = false, isSubmitting = false;
+let currentTab = "photo";
+
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const pad   = n  => String(n).padStart(2, "0");
 
@@ -181,8 +219,42 @@ function showToast(msg, type) {
   setTimeout(function(){ t.style.display = "none"; }, 4500);
 }
 
-function checkBeforeUpload(e) {
-  if (photoBase64) { e.preventDefault(); return false; }
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById("tab-photo").className = "upload-tab" + (tab==="photo" ? " active" : "");
+  document.getElementById("tab-file").className  = "upload-tab" + (tab==="file"  ? " active" : "");
+  document.getElementById("photo-upload-area").classList.toggle("hidden", tab !== "photo");
+  document.getElementById("file-upload-area").classList.toggle("hidden",  tab !== "file");
+  // clear previous attachment when switching tabs
+  clearAttachment();
+}
+
+function clearAttachment() {
+  attachBase64 = ""; attachName = ""; attachMime = "";
+  document.getElementById("f-photo").value = "";
+  document.getElementById("f-file").value = "";
+  // reset photo UI
+  document.getElementById("preview-img").style.display = "none";
+  document.getElementById("preview-img").src = "";
+  document.getElementById("upload-placeholder-photo").style.display = "block";
+  document.getElementById("photo-file-name").style.display = "none";
+  document.getElementById("upload-label-photo").classList.remove("has-file");
+  document.getElementById("change-photo-btn").style.display = "none";
+  // reset file UI
+  document.getElementById("file-info-box").style.display = "none";
+  document.getElementById("upload-placeholder-file").style.display = "block";
+  document.getElementById("upload-label-file").classList.remove("has-file");
+  document.getElementById("change-file-btn").style.display = "none";
+}
+
+function formatBytes(bytes) {
+  if (bytes < 1024) return bytes + " B";
+  if (bytes < 1048576) return (bytes/1024).toFixed(1) + " KB";
+  return (bytes/1048576).toFixed(1) + " MB";
+}
+
+function checkBeforeUpload(e, type) {
+  if (attachBase64 && currentTab === type) { e.preventDefault(); return false; }
   const cls = document.getElementById("fixed-class").value.trim();
   const sub = document.getElementById("f-subject").value.trim();
   if (!cls || !sub) {
@@ -193,6 +265,7 @@ function checkBeforeUpload(e) {
   return true;
 }
 
+// PHOTO CHANGE
 document.getElementById("f-photo").addEventListener("change", function() {
   const file = this.files[0];
   if (!file) return;
@@ -201,15 +274,40 @@ document.getElementById("f-photo").addEventListener("change", function() {
   if (!cls || !sub) { showToast("Please fill class and subject first", "err"); this.value=""; return; }
   const reader = new FileReader();
   reader.onload = function(ev) {
-    photoBase64 = ev.target.result.split(",")[1];
-    photoName   = file.name;
+    attachBase64 = ev.target.result.split(",")[1];
+    attachName   = file.name;
+    attachMime   = file.type || "image/jpeg";
     const img = document.getElementById("preview-img");
     img.src = ev.target.result; img.style.display = "block";
-    document.getElementById("upload-placeholder").style.display = "none";
-    const fn = document.getElementById("file-name");
+    document.getElementById("upload-placeholder-photo").style.display = "none";
+    const fn = document.getElementById("photo-file-name");
     fn.textContent = "Selected: " + file.name; fn.style.display = "block";
-    document.getElementById("upload-label").classList.add("has-photo");
+    document.getElementById("upload-label-photo").classList.add("has-file");
     document.getElementById("change-photo-btn").style.display = "block";
+    document.getElementById("teacher-section").classList.remove("hidden");
+  };
+  reader.readAsDataURL(file);
+});
+
+// FILE CHANGE
+document.getElementById("f-file").addEventListener("change", function() {
+  const file = this.files[0];
+  if (!file) return;
+  const cls = document.getElementById("fixed-class").value.trim();
+  const sub = document.getElementById("f-subject").value.trim();
+  if (!cls || !sub) { showToast("Please fill class and subject first", "err"); this.value=""; return; }
+  if (file.size > 10 * 1024 * 1024) { showToast("File too large. Max 10MB allowed.", "err"); this.value=""; return; }
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    attachBase64 = ev.target.result.split(",")[1];
+    attachName   = file.name;
+    attachMime   = file.type || "application/octet-stream";
+    document.getElementById("upload-placeholder-file").style.display = "none";
+    document.getElementById("fi-name").textContent = file.name;
+    document.getElementById("fi-size").textContent = formatBytes(file.size);
+    document.getElementById("file-info-box").style.display = "block";
+    document.getElementById("upload-label-file").classList.add("has-file");
+    document.getElementById("change-file-btn").style.display = "block";
     document.getElementById("teacher-section").classList.remove("hidden");
   };
   reader.readAsDataURL(file);
@@ -242,9 +340,10 @@ function addStudent() {
       '<label class="field-label">Star Amount</label>',
       '<div class="amt-wrap">',
         '<span class="amt-prefix">#</span>',
-        '<input class="field-input student-amount" type="number" placeholder="0" min="1">',
+        '<input class="field-input student-amount" type="number" placeholder="0" min="1" inputmode="numeric">',
       '</div>',
-    '</div>'
+    '</div>',
+
   ].join('');
   if (studentCount > 1) {
     div.querySelector(".remove-btn").addEventListener("click", function() {
@@ -289,19 +388,21 @@ async function submitForm() {
   const sub = document.getElementById("f-subject").value.trim();
   const tch = document.getElementById("f-teacher").value.trim();
   if (!cls || !sub || !tch) { showToast("Please fill class, subject and teacher", "err"); return; }
-  if (!photoBase64)         { showToast("Please upload a photo first", "err"); return; }
+  if (!attachBase64)        { showToast("Please upload a photo or file first", "err"); return; }
 
   const names   = document.querySelectorAll(".student-name");
   const amounts = document.querySelectorAll(".student-amount");
   const students = [];
   for (let i=0; i<names.length; i++) {
-    const n = names[i].value.trim(), a = amounts[i].value.trim();
+    const n = names[i].value.trim();
+    const a = amounts[i].value.trim();
     if (!n || !a) { showToast("Please fill all student details", "err"); return; }
     students.push({
       timestamp: getTimestamp(), date: getToday(), student_name: n,
       class: cls, star_type: "normal_star", amount: Number(a),
       reason: "micro test", expiry_date: getExpiry(), active: "active",
-      teacher_name: tch, subject: sub, photo: photoBase64, photo_name: photoName
+      teacher_name: tch, subject: sub,
+      photo: attachBase64, photo_name: attachName, photo_mime: attachMime
     });
   }
 
@@ -340,19 +441,15 @@ async function submitForm() {
 
 function resetForm() {
   ["fixed-class","f-subject","f-teacher"].forEach(function(id){ document.getElementById(id).value=""; });
-  document.getElementById("f-photo").value = "";
-  const img = document.getElementById("preview-img"); img.src=""; img.style.display="none";
-  document.getElementById("upload-placeholder").style.display = "block";
-  document.getElementById("file-name").style.display = "none";
-  document.getElementById("upload-label").classList.remove("has-photo");
-  document.getElementById("change-photo-btn").style.display = "none";
+  clearAttachment();
   document.getElementById("teacher-section").classList.add("hidden");
   document.getElementById("students-section").classList.add("hidden");
   document.getElementById("students-wrap").innerHTML = "";
   showProgressSection(false); resetSteps();
   const btn = document.getElementById("submit-btn");
   btn.textContent = "Submit All Stars"; btn.disabled = false;
-  photoBase64=""; photoName=""; studentCount=0; studentSectionShown=false; isSubmitting=false;
+  studentCount=0; studentSectionShown=false; isSubmitting=false;
+  switchTab("photo");
 }
 </script>
 </body>
