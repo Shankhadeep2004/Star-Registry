@@ -200,7 +200,7 @@ html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-s
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJl0AmHxG57H9xFNzjIa0F9ADraK4Ealuyh_jPW0S-PbMOK6pDcM7DzSgU2quXeaqbJA/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMVU4ENOhKmkTKNRdEhVN40JwheZ509-HN42TaIInq5HlbHKRlGEhQuPKyOrmeGHkC/exec";
 
 let attachBase64 = "", attachName = "", attachMime = "";
 let studentCount = 0, studentSectionShown = false, isSubmitting = false;
@@ -423,8 +423,8 @@ async function submitForm() {
     });
     await sleep(1300); setStep(2, "done");
     setStep(3, "active"); await sleep(950); setStep(3, "done");
-    setStep(4, "active"); await sleep(400); setStep(4, "done");
-    showResult("All stars submitted! Check your Google Sheet.", "ok");
+    setStep(4, "active"); await sleep(600); setStep(4, "done");
+    showResult("All stars submitted! Check your Google Sheet in 1-2 minutes.", "ok");
     btn.textContent = "Submitted!";
     await sleep(3000);
     resetForm();
