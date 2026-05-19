@@ -416,15 +416,23 @@ async function submitForm() {
     setStep(1, "active"); await sleep(380); setStep(1, "done");
     setStep(2, "active");
     const fp = fetch(SCRIPT_URL, {
-      method: "POST", mode: "no-cors",
+      method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({students: students})
     });
     await sleep(1300); setStep(2, "done");
     setStep(3, "active"); await sleep(950); setStep(3, "done");
-    setStep(4, "active"); await fp; await sleep(400); setStep(4, "done");
-    showResult("All stars submitted! Check your Google Sheet.", "ok");
-    btn.textContent = "Submitted!";
+    setStep(4, "active");
+    const res = await fp;
+    const result = await res.json();
+    await sleep(400);
+    if (result.status === "success") {
+      setStep(4, "done");
+      showResult("All stars submitted! Check your Google Sheet.", "ok");
+      btn.textContent = "Submitted!";
+    } else {
+      throw new Error(result.message || "Server error");
+    }
     await sleep(3000);
     resetForm();
   } catch(err) {
