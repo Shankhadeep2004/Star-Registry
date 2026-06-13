@@ -133,7 +133,7 @@ html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-s
     <!-- PHOTO UPLOAD -->
     <div id="photo-upload-area">
       <input type="file" id="f-photo" accept="image/jpeg,image/png,image/gif,image/webp">
-      <label class="upload-label" id="upload-label-photo" for="f-photo" onclick="return checkBeforeUpload(event,'photo')">
+      <div class="upload-label" id="upload-label-photo" onclick="triggerUpload(event,'photo')">
         <div id="upload-placeholder-photo">
           <div class="upload-icon-wrap">🖼️</div>
           <div class="upload-text">
@@ -143,14 +143,14 @@ html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-s
         </div>
         <img class="preview-img" id="preview-img" alt="Preview">
         <div class="file-name" id="photo-file-name"></div>
-      </label>
-      <button class="change-btn" id="change-photo-btn" type="button" onclick="document.getElementById('f-photo').click()">Change Photo</button>
+      </div>
+      <button class="change-btn" id="change-photo-btn" type="button" onclick="const i=document.getElementById('f-photo'); i.value=''; i.click();">Change Photo</button>
     </div>
 
     <!-- FILE UPLOAD -->
     <div id="file-upload-area" class="hidden">
       <input type="file" id="f-file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv">
-      <label class="upload-label" id="upload-label-file" for="f-file" onclick="return checkBeforeUpload(event,'file')">
+      <div class="upload-label" id="upload-label-file" onclick="triggerUpload(event,'file')">
         <div id="upload-placeholder-file">
           <div class="upload-icon-wrap">📎</div>
           <div class="upload-text">
@@ -162,8 +162,8 @@ html,body { min-height:100vh; background:var(--bg); font-family:'DM Sans',sans-s
           <div class="fi-name" id="fi-name"></div>
           <div class="fi-size" id="fi-size"></div>
         </div>
-      </label>
-      <button class="change-btn" id="change-file-btn" type="button" onclick="document.getElementById('f-file').click()">Change File</button>
+      </div>
+      <button class="change-btn" id="change-file-btn" type="button" onclick="const i=document.getElementById('f-file'); i.value=''; i.click();">Change File</button>
     </div>
 
     <div id="teacher-section" class="hidden">
@@ -253,26 +253,31 @@ function formatBytes(bytes) {
   return (bytes/1048576).toFixed(1) + " MB";
 }
 
-function checkBeforeUpload(e, type) {
-  if (attachBase64 && currentTab === type) { e.preventDefault(); return false; }
+function triggerUpload(e, type) {
+  if (e) e.stopPropagation();
+  if (attachBase64 && currentTab === type) { return; }
   const cls = document.getElementById("fixed-class").value.trim();
   const sub = document.getElementById("f-subject").value.trim();
   if (!cls || !sub) {
-    e.preventDefault();
     showToast("Please fill class and subject first", "err");
-    return false;
+    return;
   }
-  return true;
+  currentTab = type;
+  const inputId = type === "photo" ? "f-photo" : "f-file";
+  document.getElementById(inputId).click();
 }
 
 // PHOTO CHANGE
-document.getElementById("f-photo").addEventListener("change", function() {
-  const file = this.files[0];
+function handlePhotoFile() {
+  const file = this.files && this.files[0];
   if (!file) return;
   const cls = document.getElementById("fixed-class").value.trim();
   const sub = document.getElementById("f-subject").value.trim();
   if (!cls || !sub) { showToast("Please fill class and subject first", "err"); this.value=""; return; }
   const reader = new FileReader();
+  reader.onerror = function() {
+    showToast("Could not read the selected photo. Try another file.", "err");
+  };
   reader.onload = function(ev) {
     attachBase64 = ev.target.result.split(",")[1];
     attachName   = file.name;
@@ -285,19 +290,25 @@ document.getElementById("f-photo").addEventListener("change", function() {
     document.getElementById("upload-label-photo").classList.add("has-file");
     document.getElementById("change-photo-btn").style.display = "block";
     document.getElementById("teacher-section").classList.remove("hidden");
+    currentTab = "photo";
   };
   reader.readAsDataURL(file);
-});
+}
+document.getElementById("f-photo").addEventListener("change", handlePhotoFile);
+document.getElementById("f-photo").addEventListener("input", handlePhotoFile);
 
 // FILE CHANGE
-document.getElementById("f-file").addEventListener("change", function() {
-  const file = this.files[0];
+function handleDocFile() {
+  const file = this.files && this.files[0];
   if (!file) return;
   const cls = document.getElementById("fixed-class").value.trim();
   const sub = document.getElementById("f-subject").value.trim();
   if (!cls || !sub) { showToast("Please fill class and subject first", "err"); this.value=""; return; }
   if (file.size > 10 * 1024 * 1024) { showToast("File too large. Max 10MB allowed.", "err"); this.value=""; return; }
   const reader = new FileReader();
+  reader.onerror = function() {
+    showToast("Could not read the selected file. Try another file.", "err");
+  };
   reader.onload = function(ev) {
     attachBase64 = ev.target.result.split(",")[1];
     attachName   = file.name;
@@ -309,9 +320,12 @@ document.getElementById("f-file").addEventListener("change", function() {
     document.getElementById("upload-label-file").classList.add("has-file");
     document.getElementById("change-file-btn").style.display = "block";
     document.getElementById("teacher-section").classList.remove("hidden");
+    currentTab = "file";
   };
   reader.readAsDataURL(file);
-});
+}
+document.getElementById("f-file").addEventListener("change", handleDocFile);
+document.getElementById("f-file").addEventListener("input", handleDocFile);
 
 function maybeShowStudents() {
   const t = document.getElementById("f-teacher").value.trim();
